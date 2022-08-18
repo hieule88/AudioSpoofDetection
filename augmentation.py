@@ -6,6 +6,8 @@ import argparse
 from pyparsing import srange
 import soundfile as sf
 from tqdm import tqdm
+import warnings
+warnings.filterwarnings("ignore")
 
 ROOT_DATA = "/home/hieuld/workspace/ASVspoof2019/PA"
 
@@ -27,7 +29,7 @@ def noise_addition(signal_dir, noise_listname, data_folder):
     if len(noise) < len(signal):
         # PADDING NOISE
         resid_len = len(signal) - len(noise)
-        noise = np.pad(signal, (0, resid_len), 'constant', constant_values=0)
+        noise = np.pad(noise, (0, resid_len), 'constant', constant_values=0)
         # ADD NOISE
         noise_signal = signal + noise
     else:
@@ -50,6 +52,7 @@ def sortFunc(name):
 
 def make_augdata(kind, ratio):
     cm_file = os.path.join(ROOT_DATA, "ASVspoof2019_PA_cm_protocols" , "ASVspoof2019.PA.cm." + kind + ".trn.txt")
+    noisy_folder = os.path.join(ROOT_DATA, "ASVspoof2019_PA_" + kind , "noisy_signal")
     noise_folder = os.path.join(ROOT_DATA, "ASVspoof2019_PA_" + kind , "noise")
     noise_listdir = os.listdir(noise_folder)
     data_folder = os.path.join(ROOT_DATA, "ASVspoof2019_PA_" + kind , "flac")
@@ -60,21 +63,32 @@ def make_augdata(kind, ratio):
     spoof_data_list = data_list[5400:]
     bona_data_list = random.sample(bona_data_list, k= int(len(bona_data_list)*ratio ))
     spoof_data_list = random.sample(spoof_data_list, k= int(len(spoof_data_list)*(ratio+0.1)))
+
     bona_spoof_datalist = [bona_data_list, spoof_data_list]
-    labels = ['bonafide', 'spoof']
-    quit()
+    labels = ['bonafide', 'spoof', '-', 'BB']
+
     for i in range(2):
-        for signal_dir in bona_spoof_datalist[i]:
+        for signal_dir in tqdm(bona_spoof_datalist[i], total=len(bona_spoof_datalist[i])):
             signal_dir_full = os.path.join(data_folder, signal_dir)
             noisy_signal, sr, noise_name = noise_addition(signal_dir_full, noise_listdir, noise_folder)
             stretched_signal = time_stretching(noisy_signal)
 
             # ADD TO FOLDER
             noisy_signal_dir = signal_dir.split('.')[0] + '_' + noise_name
-            sf.write(os.path.join(data_folder, noisy_signal_dir), stretched_signal, sr)
+            sf.write(os.path.join(noisy_folder, noisy_signal_dir), stretched_signal, sr)
             
             # ADD TO CM 
-            
+            # Open a file with access mode 'a'
+            with open(cm_file, "a+") as file_object:
+                # Move read cursor to the start of file.
+                file_object.seek(0)
+                # If file is not empty then append '\n'
+                data = file_object.read(100)
+                if len(data) > 0 :
+                    file_object.write("\n")
+                # Append 'hello' at the end of file
+                new_line = "PA_noise " + noisy_signal_dir.split('.')[0] + " bbb " + labels[2+i] + " " + labels[i] 
+                file_object.write(new_line)
 
 def main(kind, ratio):
     make_augdata(kind, ratio)
@@ -82,7 +96,7 @@ def main(kind, ratio):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--kind', action='store', type=str, default='train')
-    parser.add_argument('--ratio', action='store', type=float, default=0.3)
+    parser.add_argument('--ratio', action='store', type=float, default=0.2)
     parser.add_argument('--random-seed', action='store', type=int, default=0)
     args = parser.parse_args()
 

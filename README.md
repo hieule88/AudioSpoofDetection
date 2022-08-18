@@ -59,6 +59,12 @@ Please notice that we have another work that is an extension of this work. If yo
    ```
 
 ### System training and evaluation
+
+   For augmenting data.
+   ```
+   python augmentation.py 
+   ```
+   
    This repo supports different system architectures, as configured in the `conf/training_mdl` directory. You can specify the system architecture, acoustic features in `start.sh`, then run the codes below to train and evaluate your models.
    ```bash
    ./start.sh

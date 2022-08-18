@@ -1,0 +1,7 @@
+/logs
+/data
+/input
+/model_snapshots
+/raw_feats
+/exp
+/__pycache__

@@ -25,6 +25,7 @@ This repository provides the implementation of the paper:
    This work is conducted on [ASVspoof2019 Dataset](https://arxiv.org/pdf/1904.05441.pdf), which can be downloaded via https://datashare.ed.ac.uk/handle/10283/3336. It consists of two subsets, i.e. physical access (PA) for replay attacks and logical access (LA) for synthetic speech attacks.
 
 ### For augmenting data.
+   Need to modify some absolute directions
    ```
    python augmentation.py 
    ```
@@ -43,7 +44,6 @@ This repository provides the implementation of the paper:
    ./start.sh
    ```
    Remember to rename your `runid` in `start.sh` to differentiate each configuration.
-   From our experiments after ICASSP 2021 submission, we observe that SERes2Net50 configured with `14w_8s` and `26w_8s` can achieve slightly better performance.
 
    For evaluating systems\
    ```bash

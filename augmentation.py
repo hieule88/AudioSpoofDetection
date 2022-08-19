@@ -24,7 +24,8 @@ def noise_addition(signal_dir, noise_listname, data_folder):
     signal, signal_sr = librosa.load(signal_dir)
     
     assert noise_sr == signal_sr
-
+    print(noise_sr)
+    print(signal_sr)
     # NEED PADDING NOISE
     if len(noise) < len(signal):
         # PADDING NOISE
@@ -58,7 +59,7 @@ def make_augdata(kind, ratio):
     data_folder = os.path.join(ROOT_DATA, "ASVspoof2019_PA_" + kind , "flac")
     data_list = os.listdir(data_folder)
     data_list.sort(key=sortFunc)
-
+    
     bona_data_list = data_list[:5400]
     spoof_data_list = data_list[5400:]
     bona_data_list = random.sample(bona_data_list, k= int(len(bona_data_list)*ratio ))
@@ -97,7 +98,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--kind', action='store', type=str, default='train')
     parser.add_argument('--ratio', action='store', type=float, default=0.2)
-    parser.add_argument('--random-seed', action='store', type=int, default=0)
+    parser.add_argument('--random-seed', action='store', type=int, default=42)
     args = parser.parse_args()
 
     kind = args.kind

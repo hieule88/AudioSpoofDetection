@@ -1,3 +1,0 @@
-PA_noise PA_T_0003156_noise5_1 bbb - bonafide
-PA_noise PA_T_0007157_noise5_1 bbb BB spoof
-PA_noise PA_T_0007157_noise5_1 bbb BB spoof

@@ -81,7 +81,7 @@ if [ -f $data/segments ]; then
 
   $cmd JOB=1:$nj $logdir/make_spectrogram_${name}.JOB.log \
     extract-segments scp,p:$scp $logdir/segments.JOB ark:- \| \
-    compute-spectrogram-feats $vtln_opts --verbose=2 --config=$feats_config ark:- ark:- \| \
+    compute-spectrogram-feats $vtln_opts --verbose=2 --config=$feats_config --allow-downsample=true ark:- ark:- \| \
     copy-feats --compress=$compress ark:- \
       ark,scp:$spectrogramdir/raw_spectrogram_$name.JOB.ark,$spectrogramdir/raw_spectrogram_$name.JOB.scp \
      || exit 1;
@@ -93,8 +93,8 @@ else
     split_scps="$split_scps $logdir/wav_${name}.$n.scp"
   done
 
-  echo "$split_scps"
   utils/split_scp.pl $scp $split_scps || exit 1;
+
 
   # add ,p to the input rspecifier so that we can just skip over
   # utterances that have bad wave data.
@@ -102,7 +102,7 @@ else
   echo "cmd: "$cmd
   echo "logdir: "$logdir
   $cmd JOB=1:$nj $logdir/make_spectrogram_${name}.JOB.log \
-    compute-spectrogram-feats  $vtln_opts --verbose=2 --config=$feats_config \
+    compute-spectrogram-feats  $vtln_opts --verbose=2 --config=$feats_config --allow-downsample=true \
      scp,p:$logdir/wav_${name}.JOB.scp ark:- \| \
       copy-feats --compress=$compress ark:- \
       ark,scp:$spectrogramdir/raw_spectrogram_$name.JOB.ark,$spectrogramdir/raw_spectrogram_$name.JOB.scp \

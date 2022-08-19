@@ -27,9 +27,6 @@ def train(train_loader, model, optim, epoch, device, log_interval):
 
         # compute output
         output = model(input)
-        print('DEBUGGGGG FOR THE END: ')
-        print(output)
-        print(target)
         # loss 
         loss = F.nll_loss(output, target)
 

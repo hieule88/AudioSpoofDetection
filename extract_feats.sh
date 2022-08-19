@@ -22,7 +22,7 @@ if [ $stage -le 0 ]; then
        awk '{print $2" "$1}' $protofile >data/${access_type}_train/utt2spk || exit 1
        feats_extraction/utt2spk_to_spk2utt.pl data/${access_type}_train/utt2spk >data/${access_type}_train/spk2utt || exit 1
        awk -v dir="${datadir}/${access_type}" -v type="${access_type}_train" '{print $2" sox "dir"/ASVspoof2019_"type"/flac/"$2".flac -t wav - |"}' $protofile >data/${access_type}_train/wav.scp || exit 1
-       
+
        for dataset in dev eval;do
            protofile=$datadir/${access_type}/ASVspoof2019_${access_type}_cm_protocols/ASVspoof2019.${access_type}.cm.${dataset}.trl.txt
            awk '{print $2" "$4}' $protofile >data/${access_type}_${dataset}/utt2systemID || exit 1

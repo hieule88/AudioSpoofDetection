@@ -9,7 +9,7 @@ from tqdm import tqdm
 import warnings
 warnings.filterwarnings("ignore")
 
-ROOT_DATA = "/home/hieuld/workspace/ASVspoof2019/PA"
+ROOT_DATA = "/home/hieuld/workspace/ASVspoof2019/PA" # absolute dir to PA dataset
 
 # ADD BEFORE ANY OTHER PREPROCESSING
 def time_stretching(signal):
@@ -59,7 +59,7 @@ def make_augdata(kind, ratio):
     data_folder = os.path.join(ROOT_DATA, "ASVspoof2019_PA_" + kind , "flac")
     data_list = os.listdir(data_folder)
     data_list.sort(key=sortFunc)
-    
+
     bona_data_list = data_list[:5400]
     spoof_data_list = data_list[5400:]
     bona_data_list = random.sample(bona_data_list, k= int(len(bona_data_list)*ratio ))
@@ -76,18 +76,14 @@ def make_augdata(kind, ratio):
 
             # ADD TO FOLDER
             noisy_signal_dir = signal_dir.split('.')[0] + '_' + noise_name
-            sf.write(os.path.join(noisy_folder, noisy_signal_dir), stretched_signal, sr)
+            sf.write(os.path.join(data_folder, noisy_signal_dir), stretched_signal, sr)
             
-            # ADD TO CM 
-            # Open a file with access mode 'a'
+            # ADD TO CM FILE
             with open(cm_file, "a+") as file_object:
-                # Move read cursor to the start of file.
                 file_object.seek(0)
-                # If file is not empty then append '\n'
                 data = file_object.read(100)
                 if len(data) > 0 :
                     file_object.write("\n")
-                # Append 'hello' at the end of file
                 new_line = "PA_noise " + noisy_signal_dir.split('.')[0] + " bbb " + labels[2+i] + " " + labels[i] 
                 file_object.write(new_line)
 

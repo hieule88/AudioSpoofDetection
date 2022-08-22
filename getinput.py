@@ -8,7 +8,7 @@ CHANNELS = 1
 RATE = 16000
 CHUNK = 1024
 RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = "output.wav"
+WAVE_OUTPUT_FILENAME = "./input/input.flac"
 
 audio = pyaudio.PyAudio()
 
@@ -31,11 +31,11 @@ waveFile.writeframes(b''.join(frames))
 waveFile.close()
 spf = wave.open(WAVE_OUTPUT_FILENAME,'r')
 
-import soundfile as sf
+# import soundfile as sf
 
-# Extract audio data and sampling rate from file 
-data, fs = sf.read(WAVE_OUTPUT_FILENAME) 
-# Save as FLAC file at correct sampling rate
-sf.write('./input/myfile.flac', data, fs)  
+# # Extract audio data and sampling rate from file 
+# data, fs = sf.read(WAVE_OUTPUT_FILENAME) 
+# # Save as FLAC file at correct sampling rate
+# sf.write('./input/myfile.flac', data, fs)  
 
 print('Finish Recording')

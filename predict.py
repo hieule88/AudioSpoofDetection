@@ -26,7 +26,16 @@ def loadmodel(modeldir, modelconf):
     model = Detector(**modelconf).to(device) 
 
     checkpoint = torch.load(modeldir, map_location=lambda storage, loc: storage)
-    model.load_state_dict(checkpoint['state_dict'])
+    from collections import OrderedDict
+    state_dict=checkpoint['state_dict']
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        name = k[7:] # remove `module.`
+        new_state_dict[name] = v
+        check_module_resid = k[:6]
+    if check_module_resid != 'module':
+        new_state_dict = checkpoint['state_dict']
+    model.load_state_dict(new_state_dict)
     return model
 
 # predict
@@ -36,10 +45,11 @@ def predict(model, data, threshold):
         output = model(data)
         print('ALL OUTPUT: ', output)
     output = output[:,0]
+    # output = output.argmax().cpu().detach().numpy()
     print('OUTPUT: ', output)
     print('THRESHOLD: ', threshold)
-    # output = output.argmax().cpu().detach().numpy()
     if output < threshold:
+    # if output:
         print('Replay Attack')
     else:
         print('Successful Authentication')
@@ -49,7 +59,7 @@ if __name__ == '__main__':
     parser.add_argument('--modeldir', action='store', type=str, default='')
     parser.add_argument('--confdir', action='store', type=str, default='')
     parser.add_argument('--specdir', action='store', type=str, default='')
-    parser.add_argument('--threshold', action='store', type=float, default=-3.190731)
+    parser.add_argument('--threshold', action='store', type=float, default=-2.677955)
 
     args = parser.parse_args()
     modeldir = args.modeldir

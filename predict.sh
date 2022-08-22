@@ -19,7 +19,7 @@ fi
 
 data=$1
 if [ "$data" == "stream" ]; then 
-   data="myfile"
+   data="input"
    # Get streaming input by python
    python3 getinput.py
 fi

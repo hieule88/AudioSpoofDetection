@@ -4,7 +4,7 @@ This repository provides the implementation of the paper:
 
 ## Checkpoints
 Download checkpoint at: <br />
-   https://drive.google.com/file/d/1r7YcPf6eWeCwkZiTjfmOG8ysJOgZSlxd/view?usp=sharing
+   https://drive.google.com/file/d/1r7YcPf6eWeCwkZiTjfmOG8ysJOgZSlxd/view?usp=sharing <br />
 then move the checkpoint to "model_snapshots/SEResNet34_finetune/"
 
 ## Dependencies

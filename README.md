@@ -56,8 +56,14 @@ then move the checkpoint to "model_snapshots/SEResNet34_finetune/"
    ```
 
 ### Predict
-   Input's Dependence: .flac, 16kHZ sample_rate, 16bits, place in input/tmp/
+
+#### For input file
+   Support any input that librosa support
    ```bash
    ./predict.sh <input_name_without_tail>
    ```
-   
+
+#### For streaming mode
+   ```bash
+   ./predict.sh stream
+   ```

@@ -22,6 +22,8 @@ if [ "$data" == "stream" ]; then
    data="input"
    # Get streaming input by python
    python3 getinput.py
+else
+   python3 convert.py --audir $data 
 fi
 
 inputfolder=input/tmp

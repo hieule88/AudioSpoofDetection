@@ -2,6 +2,11 @@
 This repository provides the implementation of the paper:
 [Replay and Synthetic Speech Detection with Res2Net architecture](https://arxiv.org/abs/2010.15006) (ICASSP 2021).
 
+## Checkpoints
+Download checkpoint at: 
+https://drive.google.com/file/d/1r7YcPf6eWeCwkZiTjfmOG8ysJOgZSlxd/view?usp=sharing
+then move the checkpoint to "model_snapshots/SEResNet34_finetune/"
+
 ## Dependencies
 
 1. Python and packages
@@ -49,3 +54,10 @@ This repository provides the implementation of the paper:
    ```bash
    python scoring/evaluate_tDCF_asvspoof19.py scoring/la_asv_scores/ASVspoof2019.LA.asv.eval.gi.trl.scores.txt NameofScoringFile.txt
    ```
+
+### Predict
+   Input's Dependence: .flac, 16kHZ sample_rate, 16bits, place in input/tmp/
+   ```bash
+   ./predict.sh <input_name_without_tail>
+   ```
+   

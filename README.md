@@ -3,9 +3,9 @@ This repository provides the implementation of the paper:
 [Replay and Synthetic Speech Detection with Res2Net architecture](https://arxiv.org/abs/2010.15006) (ICASSP 2021).
 
 ## Checkpoints
-Download checkpoint at: <br />
+Download the checkpoint at: <br />
    https://drive.google.com/file/d/1r7YcPf6eWeCwkZiTjfmOG8ysJOgZSlxd/view?usp=sharing <br />
-then move the checkpoint to "model_snapshots/SEResNet34_finetune/"
+Then move the checkpoint to "model_snapshots/SEResNet34_finetune/"
 
 ## Dependencies
 
@@ -57,7 +57,7 @@ then move the checkpoint to "model_snapshots/SEResNet34_finetune/"
 
 ### Predict
 
-#### For input file
+#### For given input file
 
    Support any input that librosa support <br />
    ```bash

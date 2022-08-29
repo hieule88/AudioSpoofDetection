@@ -8,7 +8,8 @@ CHANNELS = 1
 RATE = 16000
 CHUNK = 1024
 RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = "./input/input.flac"
+WAVE_OUTPUT_FILENAME = "./input/tmp/input0.flac"
+# WAVE_OUTPUT_FILENAME = "./input/input.flac"
 
 audio = pyaudio.PyAudio()
 

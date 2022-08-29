@@ -66,9 +66,20 @@ def main(run_id, pretrained, data_files, model_params, training_params, device):
         if os.path.isfile(pretrained):
             print("===> loading checkpoint '{}'".format(pretrained))
             checkpoint = torch.load(pretrained)
+            # change 'module' in layers
+            from collections import OrderedDict
+            state_dict=checkpoint['state_dict']
+            new_state_dict = OrderedDict()
+            for k, v in state_dict.items():
+                name = k[7:] # remove `module.`
+                new_state_dict[name] = v
+                check_module_resid = k[:6]
+            if check_module_resid != 'module':
+                new_state_dict = checkpoint['state_dict']
+
             start_epoch = checkpoint['epoch']
             best_acc1 = checkpoint['best_acc1']
-            model.load_state_dict(checkpoint['state_dict'])
+            model.load_state_dict(new_state_dict)
             optim.load_state_dict(checkpoint['optimizer'])
             print("===> loaded checkpoint '{}' (epoch {})".format(pretrained, checkpoint['epoch']))
         else:

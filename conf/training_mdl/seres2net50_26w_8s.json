@@ -4,8 +4,8 @@
         "NUM_SPOOF_CLASS" : 2
     },
     "training_params" : {
-        "batch_size" : 8,
-        "test_batch_size" : 64,
+        "batch_size" : 1,
+        "test_batch_size" : 2,
         "epochs" : 20,
         "start_epoch" : 1,
         "n_warmup_steps" : 1000,

@@ -6,8 +6,13 @@ import argparse
 from pyparsing import srange
 import soundfile as sf
 from tqdm import tqdm
+import glob
+import os
+import soundfile as sf
+from tqdm import tqdm
+import librosa    
 import warnings
-warnings.filterwarnings("ignore")
+warnings.filterwarnings('ignore')
 
 ROOT_DATA = "/home/hieuld/workspace/ASVspoof2019/PA" # absolute dir to PA dataset
 
@@ -50,6 +55,14 @@ def sortFunc(name):
     name = name.split('.')[0]
     name = name.split('_')[-1]
     return int(name)
+def sortFuncTest(name):
+    name = name.split('.')[0]
+    name = name.split('_')[0]
+    return int(name)
+def sortFuncTrain(name):
+    name = name.split('.')[0]
+    name = name.split('_')[1]
+    return int(name)
 
 def make_augdata(kind, ratio):
     cm_file = os.path.join(ROOT_DATA, "ASVspoof2019_PA_cm_protocols" , "ASVspoof2019.PA.cm." + kind + ".trn.txt")
@@ -87,8 +100,54 @@ def make_augdata(kind, ratio):
                 new_line = "PA_noise " + noisy_signal_dir.split('.')[0] + " bbb " + labels[2+i] + " " + labels[i] 
                 file_object.write(new_line)
 
+def convert():
+    desfolder = os.path.join(ROOT_DATA, "test")
+    desfolder = desfolder + '/'
+    list_name = os.listdir(desfolder)
+    list_name.sort()
+    print(list_name)
+
+    for wav_file_index in tqdm(range(len(list_name)), total=len(list_name)):
+        wav_file = desfolder + list_name[wav_file_index]
+        name = list_name[wav_file_index].split('.')[0]
+        audio, sr = librosa.load(wav_file, sr=16000)
+        sf.write(desfolder + name + '.flac', audio, sr, 'PCM_16')
+
+def make_cm():
+    cm_file = os.path.join(ROOT_DATA, "ASVspoof2019_PA_cm_protocols" , "TestFinetune.txt")
+    data_folder = os.path.join(ROOT_DATA, "testfinetune")
+    data_list = os.listdir(data_folder)
+
+    bona_data_list = []
+    spoof_data_list = []
+    for data in data_list:
+        if 'record' not in data :
+            bona_data_list.append(data)
+        else:
+            spoof_data_list.append(data)
+
+    bona_data_list.sort(key=sortFuncTest)
+    spoof_data_list.sort(key=sortFuncTest)
+
+    bona_spoof_datalist = [bona_data_list, spoof_data_list]
+    labels = ['bonafide', 'spoof', '-', 'BB']
+
+    for i in range(2):
+        for signal_dir in tqdm(bona_spoof_datalist[i], total=len(bona_spoof_datalist[i])):
+            # ADD TO CM FILE
+            with open(cm_file, "a+") as file_object:
+                file_object.seek(0)
+                data = file_object.read(100)
+                if len(data) > 0 :
+                    file_object.write("\n")
+                new_line = "PA_Haeem " + signal_dir.split('.')[0] + " bbb " + labels[2+i] + " " + labels[i] 
+                file_object.write(new_line)
+
+
 def main(kind, ratio):
-    make_augdata(kind, ratio)
+    convert()
+    # make_cm()
+    # make_augdata(kind, ratio)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

@@ -6,7 +6,7 @@
 # see ../run.sh for example
 
 # Begin configuration section.
-nj=4
+nj=2
 cmd=run.pl
 feats_config=conf/spectrogram.conf
 compress=true
@@ -67,6 +67,7 @@ if [ -f $data/spk2warp ]; then
   vtln_opts="--vtln-map=ark:$data/spk2warp --utt2spk=ark:$data/utt2spk"
 fi
 
+echo $nj
 
 if [ -f $data/segments ]; then
   echo "$0 [info]: segments file exists: using that."

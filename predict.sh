@@ -10,7 +10,7 @@ compress=true
 if [ -f path.sh ]; then . ./path.sh; fi
 . parse_options.sh || exit 1;
 
-if [ $# != 2 ]; then
+if [ $# != 1 ]; then
    echo "usage: predict.sh <data-name> <model-dir> - for data stored input";
    echo "or";
    echo "usage: predict.sh stream <model-dir> - for streaming input"
@@ -24,8 +24,7 @@ if [ "$data" == "stream" ]; then
    python3 getinput.py
 fi
 
-modeldir=$2
-inputfolder=/home/hieuld/workspace/ASV-anti-spoofing-with-Res2Net/input
+inputfolder=input/tmp
 logdir=$inputfolder/log
 spectrogramdir=$inputfolder/spec
 
@@ -82,8 +81,11 @@ nf=`cat $inputfolder/feats.scp | wc -l`
 # slicing
 python3 feats_extraction/feat_slicing.py --in-scp ${inputfolder}/feats.scp --out-scp ${inputfolder}/feats_slicing.scp --out-ark ${inputfolder}/feats_slicing.ark || exit 1
 
+# modeldir=model_snapshots/SERes2Net50_26w_8s_finetune/18_42.000.pth.tar
+# confdir=conf/training_mdl/seres2net50_26w_8s.json
+modeldir=model_snapshots/SEResNet34_finetune/27_100.000.pth.tar
 confdir=conf/training_mdl/seresnet34.json
-
+# modeldir=$2
 KALDI_ROOT='/home/hieuld/kaldi' python3 predict.py --modeldir $modeldir \
                                                    --specdir ${inputfolder}/feats_slicing.scp \
                                                    --confdir $confdir

@@ -44,12 +44,13 @@ def predict(model, data, threshold):
     with torch.no_grad():
         output = model(data)
         print('ALL OUTPUT: ', output)
-    output = output[:,0]
-    # output = output.argmax().cpu().detach().numpy()
+    print(output)
+    # output = output[:,0]
+    output = output.argmax().cpu().detach().numpy()
     print('OUTPUT: ', output)
-    print('THRESHOLD: ', threshold)
-    if output < threshold:
-    # if output:
+    # print('THRESHOLD: ', threshold)
+    # if output < threshold:
+    if output:
         print('Replay Attack')
     else:
         print('Successful Authentication')
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     parser.add_argument('--modeldir', action='store', type=str, default='')
     parser.add_argument('--confdir', action='store', type=str, default='')
     parser.add_argument('--specdir', action='store', type=str, default='')
-    parser.add_argument('--threshold', action='store', type=float, default=-2.677955)
+    parser.add_argument('--threshold', action='store', type=float, default=-0.0001)
 
     args = parser.parse_args()
     modeldir = args.modeldir
